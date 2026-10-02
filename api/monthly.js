@@ -41,7 +41,6 @@ export default async function handler(req, res) {
 
   const { hour, day } = getKyivTime();
 
-  // Guard: only send on day 28 at 11:00 Kyiv time
   if (day !== 28 || hour !== 11) {
     return res.status(200).json({ skipped: true, day, hour });
   }
@@ -49,17 +48,11 @@ export default async function handler(req, res) {
   const now = new Date();
   const monthName = now.toLocaleString('uk-UA', { month: 'long', timeZone: 'Europe/Kyiv' });
 
-  const message = `📊 <b>Monthly Report Reminder</b>
+  const message = `📊 Monthly Report Reminder
 
-Час підготувати місячний репорт для клієнта за <b>${monthName}</b>!
+Час підготувати місячний репорт для клієнта за ${monthName}!
 
-📋 Що включити:
-— Ключові wins за місяць
-— Metrics / результати
-— Що тестували + що працює
-— Plan на наступний місяць
-
-⏰ Дедлайн: до кінця дня!`;
+⏰ Дедлайн: до кінця місяця!`;
 
   await sendTelegramMessage(message);
   return res.status(200).json({ sent: true, day, hour });
