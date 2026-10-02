@@ -31,28 +31,20 @@ async function sendTelegramMessage(text) {
 }
 
 export default async function handler(req, res) {
-  // Security: Vercel sends CRON_SECRET in Authorization header
   if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   const kyivHour = getKyivHour();
 
-  // Only send at 11:00 Kyiv time (cron runs at 08:00 + 09:00 UTC to cover DST)
   if (kyivHour !== 11) {
     return res.status(200).json({ skipped: true, kyivHour });
   }
 
-  const message = `🔔 <b>Friday Reminder</b>
-
-✅ <b>Wins this week:</b>
-—
-
-👀 <b>Observations:</b>
-—
-
-📋 Log your wins + lessons before the week closes!`;
+  const message = `Ребята, всем привет! 😊
+Напоминаю, пожалуйста, что в вечерних репортах сегодня нужно написать свой win за неделю 🏆
+Это может быть что угодно — любой результат, достижение или момент, которым вы довольны. Выделите его в репорте и отправьте вместе с остальной информацией.
+Жду ваши wins! 🔥`;
 
   await sendTelegramMessage(message);
-  return res.status(200).json({ sent: true, kyivHour });
-}
+  return res.status(200).json({ sent: true, kyivHour
