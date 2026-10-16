@@ -1,5 +1,3 @@
-// api/monthly.js — fires on the 28th of every month at 11:00 Kyiv time
-
 function getKyivTime() {
   const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Europe/Kyiv',
@@ -27,10 +25,7 @@ async function sendTelegramMessage(text) {
       }),
     }
   );
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Telegram error: ${err}`);
-  }
+  if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
@@ -45,8 +40,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ skipped: true, day, hour });
   }
 
-  const now = new Date();
-  const monthName = now.toLocaleString('uk-UA', { month: 'long', timeZone: 'Europe/Kyiv' });
+  const monthName = new Date().toLocaleString('uk-UA', {
+    month: 'long',
+    timeZone: 'Europe/Kyiv',
+  });
 
   const message = `📊 Monthly Report Reminder
 
@@ -56,4 +53,4 @@ module.exports = async function handler(req, res) {
 
   await sendTelegramMessage(message);
   return res.status(200).json({ sent: true, day, hour });
-}
+};
