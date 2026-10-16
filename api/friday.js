@@ -1,5 +1,3 @@
-// api/friday.js — fires every Friday, checks if it's 11:00 in Kyiv before sending
-
 function getKyivHour() {
   return parseInt(
     new Intl.DateTimeFormat('en-US', {
@@ -23,10 +21,7 @@ async function sendTelegramMessage(text) {
       }),
     }
   );
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Telegram error: ${err}`);
-  }
+  if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
@@ -47,4 +42,5 @@ module.exports = async function handler(req, res) {
 Жду ваши wins! 🔥`;
 
   await sendTelegramMessage(message);
-  return res.status(200).json({ sent: true, kyivHour
+  return res.status(200).json({ sent: true, kyivHour });
+};
