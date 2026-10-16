@@ -1,8 +1,6 @@
 {
   "name": "telegram-reminders",
   "version": "1.0.0",
-  "description": "Telegram reminder bot — Friday wins + monthly report",
-  "type": "module",
   "scripts": {
     "dev": "vercel dev"
   },
